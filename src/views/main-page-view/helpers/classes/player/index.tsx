@@ -1,5 +1,9 @@
+import { IKeys } from "@/views/main-page-view";
 import { CollisionBlocks } from "../collisions-block";
-import { SpriteWithAnimation, ISpriteAnimation } from "../sprite-with-animation";
+import {
+  SpriteWithAnimation,
+  ISpriteAnimation,
+} from "../sprite-with-animation";
 
 export interface IPlayer {
   context: CanvasRenderingContext2D;
@@ -8,6 +12,7 @@ export interface IPlayer {
   frameRate: number;
   animation: ISpriteAnimation;
   lastDirection: string;
+  preventInput?: boolean;
 }
 
 export class Player extends SpriteWithAnimation {
@@ -21,6 +26,7 @@ export class Player extends SpriteWithAnimation {
   collisionsBlocks;
   hitBox;
   lastDirection;
+  preventInput;
 
   constructor({
     context,
@@ -29,6 +35,7 @@ export class Player extends SpriteWithAnimation {
     frameRate,
     animation,
     lastDirection,
+    preventInput = true,
   }: IPlayer) {
     const playerPosition = {
       x: 200,
@@ -76,6 +83,8 @@ export class Player extends SpriteWithAnimation {
 
     this.animation = animation;
     this.lastDirection = lastDirection;
+
+    this.preventInput = preventInput;
   }
 
   checkHorizontalCollision() {
@@ -192,7 +201,27 @@ export class Player extends SpriteWithAnimation {
     // check vertical collisions
   }
 
-  switchSprite(animationInner: AnimationInner): void {
-    
+  handleInput(keys: IKeys) {
+    if (!this.preventInput) {
+      return;
+    }
+
+    if (this.animation) {
+      if (keys.arrowRight.pressed) {
+        this.switchSprite(this.animation.runRight);
+        this.lastDirection = "runRight";
+        this.velocity.x = 4;
+      } else if (keys.arrowLeft.pressed) {
+        this.switchSprite(this.animation.runLeft);
+        this.lastDirection = "runLeft";
+        this.velocity.x = -4;
+      } else {
+        if (this.lastDirection === "runRight") {
+          this.switchSprite(this.animation.idleRight);
+        } else {
+          this.switchSprite(this.animation.idleLeft);
+        }
+      }
+    }
   }
 }

@@ -23,8 +23,6 @@ export class Sprite {
       this.size.height = this.image.height;
       this.size.width = this.image.width;
     };
-
-    console.log("image", this.image);
   }
 
   draw() {

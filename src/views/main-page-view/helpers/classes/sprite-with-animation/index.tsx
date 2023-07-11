@@ -4,6 +4,8 @@ interface AnimationInner {
   loop: boolean;
   imageSrc: string;
   animationImage: HTMLImageElement;
+  isActive?: boolean;
+  onComplete?: () => void;
 }
 
 export type ISpriteAnimation = {
@@ -19,6 +21,7 @@ export interface ISpriteWithAnimation {
   animation?: ISpriteAnimation;
   loop?: boolean;
   autoplay?: boolean;
+  isActive?: boolean;
 }
 
 export class SpriteWithAnimation {
@@ -34,6 +37,8 @@ export class SpriteWithAnimation {
   animation: ISpriteAnimation | null;
   loop;
   autoplay;
+  currentAnimation: AnimationInner | null = null;
+  isActive;
 
   constructor({
     spritePosition,
@@ -44,6 +49,7 @@ export class SpriteWithAnimation {
     frameBuffer = 3,
     loop = true,
     autoplay = true,
+    isActive = false,
   }: ISpriteWithAnimation) {
     this.context = context;
     this.spritePosition = spritePosition;
@@ -65,6 +71,8 @@ export class SpriteWithAnimation {
     };
     this.loaded = false;
 
+    this.isActive = isActive;
+
     // animation when move left or right
     this.animation = animation || null;
 
@@ -85,6 +93,8 @@ export class SpriteWithAnimation {
     this.image = animationInner.animationImage;
     this.frameRate = animationInner.frameRate;
     this.frameBuffer = animationInner.frameBuffer;
+    this.loop = animationInner.loop;
+    this.currentAnimation = animationInner;
   }
 
   play() {
@@ -93,9 +103,7 @@ export class SpriteWithAnimation {
 
   stoptPlay() {
     this.autoplay = false;
-    if(this.currentFrame > 0) {
-      this.currentFrame--;
-    }
+    this.currentFrame = 0;
   }
 
   updateFrames() {

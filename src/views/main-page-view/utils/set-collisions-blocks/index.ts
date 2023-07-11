@@ -13,8 +13,6 @@ export const setCollisionsBlocks = ({
 }: ISetCollisionsBlocks) => {
   let collisionsBlocks: CollisionBlocks[] = [];
 
-  console.log("numbers", numbers);
-
   numbers.forEach((row, y) =>
     row.forEach((number, x) => {
       if (number === collisionNumber) {

@@ -6,16 +6,17 @@ interface IMoving {
   event: KeyboardEvent;
   player: Player;
   keys: IKeys;
-  doors: SpriteWithAnimation[];
+  door: SpriteWithAnimation;
 }
 
-export const handleKeyDown = ({ event, player, keys, doors }: IMoving) => {
+export const handleKeyDown = ({ event, player, keys, door }: IMoving) => {
   switch (event.key) {
     case "ArrowUp":
-      for (let i = 0; i < doors.length; i++) {
-        const door = doors[i];
-
+      if (player.velocity.y === 0) {
+        player.velocity.y -= 20;
+      }
         // doors detect
+
         if (
           player.hitBox.position.x + player.hitBox.width <=
             door.spritePosition.x + door.spriteSize.width &&
@@ -27,16 +28,15 @@ export const handleKeyDown = ({ event, player, keys, doors }: IMoving) => {
         ) {
           player.velocity.y = 0;
           player.velocity.x = 0;
-          
-          door.play();
-        } else {
-          door.stoptPlay();
-        }
-      }
 
-      if (player.velocity.y === 0) {
-        player.velocity.y -= 20;
-      }
+          if (player.animation && player.animation.runInDoor.onComplete) {
+            player.switchSprite(player.animation.runInDoor);
+            player.animation.runInDoor.onComplete();
+          }
+
+          door.play();
+        } 
+
       break;
 
     case "ArrowRight":

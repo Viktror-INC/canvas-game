@@ -19,13 +19,14 @@ export class CollisionBlocks {
     this.context = context;
   }
 
+  // draw collision for test
   draw() {
-    this.context.fillStyle = "rgba(255, 0,0, 0.3)";
-    this.context.fillRect(
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
+    // this.context.fillStyle = "rgba(255, 0,0, 0.3)";
+    // this.context.fillRect(
+    //   this.position.x,
+    //   this.position.y,
+    //   this.width,
+    //   this.height
+    // );
   }
 }
