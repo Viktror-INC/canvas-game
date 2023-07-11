@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Player } from "./helpers/classes/player";
 import { handleKeyDown, handleKeyUp } from "./helpers/events/moving";
 import { Sprite } from "./helpers/classes/sprite";
@@ -240,7 +240,7 @@ const MainPageView = () => {
       );
       window.cancelAnimationFrame(window.requestAnimationFrame(animate));
     };
-  }, []);
+  }, [canvasRef]);
 
   return (
     <div>
