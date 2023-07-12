@@ -50,6 +50,7 @@ const MainPageView = () => {
     // its 16:9
     canvas.width = 64 * 16; //1024
     canvas.height = 64 * 9; //576
+    const doorDefaultSize = { width: 92, height: 112 };
 
     let background: Sprite;
 
@@ -68,6 +69,7 @@ const MainPageView = () => {
         },
         context,
         imageSrc: "/img/doorOpen.png",
+        spriteSize: doorDefaultSize,
       }),
 
       new SpriteWithAnimation({
@@ -81,6 +83,7 @@ const MainPageView = () => {
         },
         context,
         imageSrc: "/img/doorOpen.png",
+        spriteSize: doorDefaultSize,
       }),
 
       new SpriteWithAnimation({
@@ -94,13 +97,14 @@ const MainPageView = () => {
         },
         context,
         imageSrc: "/img/doorOpen.png",
+        spriteSize: doorDefaultSize,
       }),
     ];
 
     let door: SpriteWithAnimation;
 
     // lvl background
-    let level = 3;
+    let level = 1;
     let levels = {
       init: () => {
         player.preventInput = true;
@@ -201,24 +205,27 @@ const MainPageView = () => {
       },
     });
 
+    console.log("player", player);
+
     const animate = () => {
       window.requestAnimationFrame(animate);
+      background.draw();
       player.velocity.x = 0;
 
-      background.draw();
       door.draw();
-      player.draw();
       collisionsBlocks.forEach((block) => block.draw());
 
       player.handleInput(keys);
       // replay
-      player.update();
 
       context.save();
       context.globalAlpha = overlay.opacity;
       context.fillStyle = "black";
       context.fillRect(0, 0, canvas.width, canvas.height);
       context.restore();
+
+      player.draw();
+      player.update();
     };
 
     levels.init();

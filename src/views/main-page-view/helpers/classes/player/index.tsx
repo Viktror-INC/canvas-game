@@ -53,7 +53,10 @@ export class Player extends SpriteWithAnimation {
       context,
       frameRate,
       animation,
+      spriteSize: playerSize,
     });
+
+    console.log("context", context);
 
     this.playerPosition = playerPosition;
 

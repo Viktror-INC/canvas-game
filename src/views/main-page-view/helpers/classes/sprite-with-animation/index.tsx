@@ -14,6 +14,7 @@ export type ISpriteAnimation = {
 
 export interface ISpriteWithAnimation {
   spritePosition: { x: number; y: number };
+  spriteSize: { width: number; height: number };
   context: CanvasRenderingContext2D;
   imageSrc: string;
   frameRate: number;
@@ -21,7 +22,6 @@ export interface ISpriteWithAnimation {
   animation?: ISpriteAnimation;
   loop?: boolean;
   autoplay?: boolean;
-  isActive?: boolean;
 }
 
 export class SpriteWithAnimation {
@@ -38,7 +38,6 @@ export class SpriteWithAnimation {
   loop;
   autoplay;
   currentAnimation: AnimationInner | null = null;
-  isActive;
 
   constructor({
     spritePosition,
@@ -49,8 +48,8 @@ export class SpriteWithAnimation {
     frameBuffer = 3,
     loop = true,
     autoplay = true,
-    isActive = false,
-  }: ISpriteWithAnimation) {
+  }:
+  ISpriteWithAnimation) {
     this.context = context;
     this.spritePosition = spritePosition;
 
@@ -58,31 +57,34 @@ export class SpriteWithAnimation {
     this.frameBuffer = frameBuffer;
     this.loop = loop;
     this.autoplay = autoplay;
+    this.loaded = false; // Set loaded to false initially
+
+    this.spriteSize = { width: 0, height: 0 }; // Initialize spriteSize
 
     //player image
     this.image = new Image();
     this.image.src = imageSrc;
-    this.spriteSize = { width: 0, height: 0 };
-
-    this.image.onload = () => {
-      this.loaded = true;
-      this.spriteSize.width = this.image.width / frameRate; // we have 11 player on image on full weight
-      this.spriteSize.height = this.image.height;
-    };
-    this.loaded = false;
-
-    this.isActive = isActive;
 
     // animation when move left or right
     this.animation = animation || null;
 
     if (this.animation) {
       for (let key in this.animation) {
-        const image = new Image();
-        image.src = this.animation[key].imageSrc;
-        this.animation[key].animationImage = image;
+        const animationImage = new Image();
+        animationImage.src = this.animation[key].imageSrc;
+        this.animation[key].animationImage = animationImage;
       }
     }
+
+    this.image.onload = () => {
+      this.loaded = true; // Update loaded to true when the image is loaded
+      this.spriteSize.width = this.image.width / frameRate;
+      this.spriteSize.height = this.image.height;
+
+      console.log('this.image.src', this.image.src);
+      console.log('this.image.width', this.image.width);
+      console.log('this.image.height', this.image.height);
+    };
   }
 
   switchSprite(animationInner: AnimationInner) {
@@ -126,7 +128,6 @@ export class SpriteWithAnimation {
       return;
     }
 
-    // this.currentFrame = this.image.width / this.spritePosition.x;
     const cropBox = {
       position: {
         x: this.spriteSize.width * this.currentFrame,
