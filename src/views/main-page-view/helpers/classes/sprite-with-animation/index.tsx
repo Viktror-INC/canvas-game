@@ -48,8 +48,7 @@ export class SpriteWithAnimation {
     frameBuffer = 3,
     loop = true,
     autoplay = true,
-  }:
-  ISpriteWithAnimation) {
+  }: ISpriteWithAnimation) {
     this.context = context;
     this.spritePosition = spritePosition;
 
@@ -65,6 +64,8 @@ export class SpriteWithAnimation {
     this.image = new Image();
     this.image.src = imageSrc;
 
+    this.loadImage(this.image, this.frameRate);
+
     // animation when move left or right
     this.animation = animation || null;
 
@@ -75,15 +76,17 @@ export class SpriteWithAnimation {
         this.animation[key].animationImage = animationImage;
       }
     }
+  }
+
+  loadImage(image: HTMLImageElement, frameRate: number) {
+    if (this.image !== image) {
+      this.image = image;
+    }
 
     this.image.onload = () => {
       this.loaded = true; // Update loaded to true when the image is loaded
       this.spriteSize.width = this.image.width / frameRate;
       this.spriteSize.height = this.image.height;
-
-      console.log('this.image.src', this.image.src);
-      console.log('this.image.width', this.image.width);
-      console.log('this.image.height', this.image.height);
     };
   }
 
@@ -92,7 +95,9 @@ export class SpriteWithAnimation {
       return;
     }
     this.currentFrame = 0;
-    this.image = animationInner.animationImage;
+
+    this.loadImage(animationInner.animationImage, animationInner.frameRate);
+
     this.frameRate = animationInner.frameRate;
     this.frameBuffer = animationInner.frameBuffer;
     this.loop = animationInner.loop;
