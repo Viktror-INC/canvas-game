@@ -1,8 +1,7 @@
-# Try the game
-[https://canvas-game-ebon.vercel.app/](https://canvas-game-ebon.vercel.app/)
-
 # Game Documentation
 
+## Try the game
+[https://canvas-game-ebon.vercel.app/](https://canvas-game-ebon.vercel.app/)
 ## Introduction
 This document provides an overview of the JavaScript game built using Next.js. The game allows players to navigate through different levels by moving around rooms, entering doors, and changing levels.
 
