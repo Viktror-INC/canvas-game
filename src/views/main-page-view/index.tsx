@@ -218,14 +218,16 @@ const MainPageView = () => {
       player.handleInput(keys);
       // replay
 
+      player.draw();
+      player.update();
+
       context.save();
       context.globalAlpha = overlay.opacity;
       context.fillStyle = "black";
       context.fillRect(0, 0, canvas.width, canvas.height);
       context.restore();
 
-      player.draw();
-      player.update();
+      
     };
 
     levels.init();
